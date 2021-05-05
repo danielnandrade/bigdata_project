@@ -1,13 +1,10 @@
 """ Projektarbeit Gruppe X: Helena Brinkmann, Eugen Sperling und Daniel Andrade
 Ziel der Arbeit: Inwieweit beeinflusst das Bevölkerungswachstum/-entwicklung den Außenhandel
-bzw. Export eines Landes. 
-Tabellen, die vom Internet gezogen sind: """
+bzw. Export eines Landes. """
 
 """[summary]
-
 Returns:
     [type]: [description]
-
 TODO: * change file locations/ relative path??
         * change file save name
         * use with open in file handler class
@@ -16,8 +13,6 @@ TODO: * change file locations/ relative path??
         * clean up
         * remove plt.show()
 """
-#imports:
-
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -27,31 +22,28 @@ import streamlit as st
 
 
 def main():
-    #main loop to run:
+    my_data_path = "daten/"
     
-    #initialize a data_handler object:
-    filehandler = data_handler()
-    #read in data:
+    filehandler = data_handler()     # Initialize a data_handler object for later reading and handling of the data
+    
+    # # Read the data and save as a PandaFrame
+    df_pop = filehandler.read_data(my_data_path + "pop_FAOSTAT_data_5-4-2021.csv")
+    df_export = filehandler.read_data(my_data_path + "export_value_base_FAOSTAT_data_5-4-2021.csv")
+    df_prod = filehandler.read_data(my_data_path + "production_FAOSTAT_data_5-5-2021.csv")
 
-    df_pop = filehandler.read_data("pop_FAOSTAT_data_5-4-2021.csv")
-    df_export = filehandler.read_data("export_value_base_FAOSTAT_data_5-4-2021.csv")
-    df_prod = filehandler.read_data("production_FAOSTAT_data_5-5-2021.csv")
-
-    #rename 
+    # # Rename the columns: Instead of 'Values', the name of the column is changed 
     df_export = filehandler.rename_column(df_export, "EVBP")
     df_pop = filehandler.rename_column(df_pop, "Pop")
     df_prod = filehandler.rename_column(df_prod, "Production")
 
-    #safe work files:
+    # # Safe work files as Json-File:
     filehandler.save_data(df_pop)
     filehandler.save_data(df_prod)
     filehandler.save_data(df_export)
 
-    #strip data to relevant parts:
-
+    ## # Now we only want to use some of the data - Strip data to relevant parts:
     df_clean_data = filehandler.general_data(df_export, df_pop, df_prod)
-    
-    filehandler.save_data(df_clean_data)
+    filehandler.save_data(df_clean_data)    # Saving of the new Dataframe
 
 
     # # 1. Teil: Ist ein allgemeinen Trend in den Schaubildern da?
@@ -77,10 +69,10 @@ def main():
     #add simple plot ( no analysis)
 
     #analysis:
-
+    # countries = ["Germany"]
     ana = analysis()
-    print("\n analysis: \n")
-    print(ana.ols_regression(df_clean_data))
+    # print("\n analysis: \n")
+    # print(ana.ols_regression(df_clean_data))
 
     # # 2. Teil: Hier werden die Trends genauer betrachtet und skaliert gesehen.
     
@@ -108,21 +100,22 @@ def main():
     ## streamlit execution:
     #---------------------------------------------headline
 
-    #test in local with:    streamlit run endprojekt_streamlit_004.py
+    #test in local with:    streamlit run endprojekt_streamlit_006.py
 
-    st.title("**_Abhängigkeit des Exports bzw. der Produktion von der Bevölkerungsentwicklung_**")
+    st.write("**Abhängigkeit des Exports bzw. der Produktion von der Bevölkerungsentwicklung**", type="multiline")
     #print("**_Abhängigkeit des Exports bzw. der Produktion von der Bevölkerungsentwicklung_**")
-    st.write("FAO analyzer v1.0")
-
+    st.write("FAO analyzer v1.1")
 
     #-------------------------------------description:
-
-    description =("Fragestellung: tool um relation zwischen Bevoelkerungswachstum \
-                    und expoerten ( lebensmittel?) zu iuntersuchen")
-
+    description =("_Fragestellung: In wieweit beeinflusst die Bevölkerungsentwicklung das Export bzw. die Produktion von Lebensmittel? Am Beispiel von drei Länder._")
     st.write(description)
+    st.write("Data Description:")
+    st.dataframe(df_clean_data.describe())
 
-    #thesis/ Fragestellung hier??
+    #-----------------------------------------quick glance plot:
+    st.write("Comparision of all the countries together:")
+    fig1 = plothandler.simple_plot(df_clean_data)
+    st.pyplot(fig1)
 
     #----------------------------auswahl daten:
 
@@ -130,45 +123,35 @@ def main():
 
     #auswahl für länder?
 
-    my_label = st.selectbox("Filter", ["Area","Year"])
-
-    #print out heads:
-
-    st.write("Data information:")
-
-    st.write("Data Description:\n", df_clean_data.describe())
-    st.write("Data Info:\n", df_clean_data.info())
-
-    # st.write("Population:\n", df_pop_new.describe())
-    # st.write("Population:\n", df_pop_new.info())
-
-
-    #-----------------------------------------quick glance plot:
-
-    st.pyplot(plothandler.simple_plot(df_clean_data))
-
+    my_label = st.selectbox("Please select one country", ["Brazil","Cambodia", "Germany"])
+    countries = [my_label]
+    # countries.append(my_label)
 
     #------------------------analysis
-
-    st.write(description)
+    information = "_Now you can analyse the choosen country:_"
+    st.write(information)
 
     #thesis/ Fragestellung hier??
 
     #regression?? / methoden?
 
-    st.write(ana.ols_regression(df_clean_data))
+    
+    st.pyplot(ana.ols_regression(df_clean_data, my_label), type="multiline")
+    
 
 
     #-------------------------better plots
 
     #schoene plots um endergebnis darzustellen???
-
-    st.pyplot(plothandler.relative_data_plot(countries, df_export, df_pop, "EVBP", "Pop"))
-    st.pyplot(plothandler.relative_data_plot(countries, df_prod, df_pop, "Production", "Pop"))
+    fig3 = plothandler.relative_data_plot(countries, df_export, df_pop, "EVBP", "Pop")
+    st.pyplot(fig3)
+    fig4 = plothandler.relative_data_plot(countries, df_prod, df_pop, "Production", "Pop")
+    st.pyplot(fig4)
 
 
     for i in countries:
-        st.pyplot(sns.jointplot(x="Pop", y="EVBP", data=df_clean_data[df_clean_data['Area']==i], kind = 'reg',fit_reg= True, size = 7))
+        fig5 = sns.jointplot(x="Pop", y="EVBP", data=df_clean_data[df_clean_data['Area']==i], kind = 'reg',fit_reg= True, size = 7)
+        st.pyplot(fig5)
         #plt.show()
 
 
@@ -186,7 +169,7 @@ class data_handler():
         for i in dataframe.columns:
             filename = filename + str(i) +"_"
         filename = filename.replace(" ","_")
-        dataframe.to_json(f'C:/Users/Eugen/OneDrive/Data_science/Big_data/python_big_data/Big_data_project/saved_data/{filename}.json')
+        dataframe.to_json(f'daten/{filename}.json')
         print("file saved!")
 
         #mongo db wegspeichern ???
@@ -217,19 +200,19 @@ class plotter_class():
     
     def simple_plot(self , dataframe):
 
-        fig, (ax1, ax2, ax3) = plt.subplots(3, sharex=True)
-        fig.suptitle("Comparision of population growth and export value base price")
+        fig1, (ax1, ax2, ax3) = plt.subplots(3, sharex=True)
+        fig1.suptitle("Comparision of population growth and export value base price / production")
         plt1 = sns.lineplot(ax=ax1, x="Year", y="Pop", hue="Area", data=dataframe)
         plt1.set_yscale("log")
         plt2 = sns.lineplot(ax=ax2, x="Year", y="EVBP", hue="Area", data=dataframe)
         plt2.set_yscale("log")
         plt2 = sns.lineplot(ax=ax3, x="Year", y="Production", hue="Area", data=dataframe)
         plt2.set_yscale("log")
-        plt.show()
+        # plt.show()
 
         #fig, ax = plt.subplots() #solved by add this line 
         #ax = sns.lineplot(data=pd.DataFrame(data), x="Demand", y="price")
-        return fig
+        return fig1
 
     def relative_data_plot(self, countrieslist, dataframe1, dataframe2, keynamedata1, keynamedata2):
         countries_dep, countries_pop = [], []
@@ -242,15 +225,19 @@ class plotter_class():
 
         plt.xlabel(f"{keynamedata2} - Increament Factor")
         plt.ylabel(f"{keynamedata1} - Increament Factor") # NOCH GEÄNDERT
-        plt.show()
+        # plt.show()
 
 
 class analysis():
     #lin regression/ plynom/ exp??
 
-    def ols_regression(self, dataframe):
-        m = ols('EVBP ~ Pop',dataframe[dataframe["Area"] == "Brazil"]).fit()
-        return m.summary()
+    def ols_regression(self, dataframe, mylabel):
+        m = ols('EVBP ~ Pop', dataframe[dataframe["Area"] == mylabel]).fit()
+        fig2 = plt.text(0.01, 0.05, str(m.summary()), {'fontsize': 10}, fontproperties = 'monospace')
+        # plt.axis("off")
+        # plt.tight_layout()
+        fig2 = plt.savefig("ols.png")
+        return fig2
 
 
 if __name__ == "__main__":
