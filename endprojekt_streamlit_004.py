@@ -22,7 +22,7 @@ import streamlit as st
 
 
 def main():
-    my_data_path = "daten/"
+    my_data_path = ""
     
     filehandler = data_handler()     # Initialize a data_handler object for later reading and handling of the data
     
