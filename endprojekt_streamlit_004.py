@@ -33,9 +33,9 @@ def main():
     filehandler = data_handler()
     #read in data:
 
-    df_pop = filehandler.read_data("C:/Users/Eugen/OneDrive/Data_science/Big_data/python_big_data/Big_data_project/daten/pop_FAOSTAT_data_5-4-2021.csv")
-    df_export = filehandler.read_data("C:/Users/Eugen/OneDrive/Data_science/Big_data/python_big_data/Big_data_project/daten/export_value_base_FAOSTAT_data_5-4-2021.csv")
-    df_prod = filehandler.read_data("C:/Users/Eugen/OneDrive/Data_science/Big_data/python_big_data/Big_data_project/daten/production_FAOSTAT_data_5-5-2021.csv")
+    df_pop = filehandler.read_data("pop_FAOSTAT_data_5-4-2021.csv")
+    df_export = filehandler.read_data("export_value_base_FAOSTAT_data_5-4-2021.csv")
+    df_prod = filehandler.read_data("production_FAOSTAT_data_5-5-2021.csv")
 
     #rename 
     df_export = filehandler.rename_column(df_export, "EVBP")
