@@ -14,7 +14,7 @@ db = client.FAO_analyzer
 json_dump = db.json_dump     # Collection in der Datenbank FAO-Analyzer
 
 def main():
-    my_data_path = "daten/"     # Bitte jedes einzelne Benutzer anpassen! Lokaler Datenpfad für Ausführungen
+    my_data_path = "C:/Users/Alfa/Documents/Bigdata/bigdata_project/daten/"     # Bitte jedes einzelne Benutzer anpassen! Lokaler Datenpfad für Ausführungen
     
     filehandler = data_handler()     # Initialize a data_handler object for later reading and handling of the data
     
