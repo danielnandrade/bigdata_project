@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 
-from statsmodels.formula.api import ols
+
 from pymongo import MongoClient
 import json
 import os, sys
