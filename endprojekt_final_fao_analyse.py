@@ -6,6 +6,7 @@ from statsmodels.formula.api import ols
 import streamlit as st
 from pymongo import MongoClient
 import json
+import os, sys
 
 # # Init mongodb and connection to MongoDB
 cluster = "mongodb+srv://alfabigdata:pw5478@cluster0mongotest.qtvn4.mongodb.net/FAO_analyzer?retryWrites=true&w=majority"
@@ -14,8 +15,11 @@ db = client.FAO_analyzer
 json_dump = db.json_dump     # Collection in der Datenbank FAO-Analyzer
 
 def main():
-    my_data_path = "daten/"     # Bitte jedes einzelne Benutzer anpassen! Lokaler Datenpfad für Ausführungen
-    
+    my_data_path = sys.path[0]    # Bitte jedes einzelne Benutzer anpassen! Lokaler Datenpfad für Ausführungen
+    # my_data_path = "C:\Users\Alfa\Documents\Bigdata\bigdata_project\daten\"     # Bitte jedes einzelne Benutzer anpassen! Lokaler Datenpfad für Ausführungen
+
+
+
     filehandler = data_handler()     # Initialize a data_handler object for later reading and handling of the data
     
     # # Read the data and save as a PandaFrame
