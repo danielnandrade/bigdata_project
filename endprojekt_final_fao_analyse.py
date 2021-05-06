@@ -6,7 +6,6 @@ from statsmodels.formula.api import ols
 import streamlit as st
 from pymongo import MongoClient
 import json
-import os, sys
 
 # # Init mongodb and connection to MongoDB
 cluster = "mongodb+srv://alfabigdata:pw5478@cluster0mongotest.qtvn4.mongodb.net/FAO_analyzer?retryWrites=true&w=majority"
@@ -15,11 +14,8 @@ db = client.FAO_analyzer
 json_dump = db.json_dump     # Collection in der Datenbank FAO-Analyzer
 
 def main():
-    my_data_path = sys.path[0]    # Bitte jedes einzelne Benutzer anpassen! Lokaler Datenpfad für Ausführungen
-    # my_data_path = "C:\Users\Alfa\Documents\Bigdata\bigdata_project\daten\"     # Bitte jedes einzelne Benutzer anpassen! Lokaler Datenpfad für Ausführungen
-
-
-
+    my_data_path = "daten/"     # Bitte jedes einzelne Benutzer anpassen! Lokaler Datenpfad für Ausführungen
+    
     filehandler = data_handler()     # Initialize a data_handler object for later reading and handling of the data
     
     # # Read the data and save as a PandaFrame
@@ -114,7 +110,8 @@ def main():
     
     st.write("**Appendix: Source-Code**")
     def code_text():
-        return '''import numpy as np
+        return '''
+        import numpy as np
         import pandas as pd
         import seaborn as sns
         import matplotlib.pyplot as plt
@@ -131,9 +128,9 @@ def main():
 
         def main():
             my_data_path = "daten/"     # Bitte jedes einzelne Benutzer anpassen! Lokaler Datenpfad für Ausführungen
-            
+                    
             filehandler = data_handler()     # Initialize a data_handler object for later reading and handling of the data
-            
+                    
             # # Read the data and save as a PandaFrame
             df_pop = filehandler.read_data(my_data_path + "pop_FAOSTAT_data_5-4-2021.csv")
             df_export = filehandler.read_data(my_data_path + "export_value_base_FAOSTAT_data_5-4-2021.csv")
@@ -218,13 +215,13 @@ def main():
             # # ---------- Schlussfolgerung
             st.write("**Schlussfolgerung** Hier kann man sehr gut zwischen die drei Arten Länder unterscheiden:")
             st.write("- In Brasilien, ein Schwellenland, sieht man einen eindeutigen exponentiellen Zusammenhang. Je größer die Bevölkerung, desto größer \
-                    die Produktion und der Export von Agrarprodukte.")
+                die Produktion und der Export von Agrarprodukte.")
             st.write("- In Deutschland, ein Industrieland, ist der wirtschaftliche Wachtstum unabhängig von der Bevölkerungsentwicklung. Dieser wächst meist \
-                    kontinuierlich.")
+                kontinuierlich.")
             st.write("- In Kambodscha, ein Entwicklungsland, kann man unterschiedliches sehen. Während der Pol Pot-Diktatur gibt es kein wirtschaftlichen \
-            Wachtstum, jedoch am Ende der Diktatur dieser und die Produktion stark zunehmen. ")
+                Wachtstum, jedoch am Ende der Diktatur dieser und die Produktion stark zunehmen. ")
 
-                class data_handler():
+        class data_handler():
 
             def read_data(self, filename):
                 """ Auslesen der Daten in ein Pandas Dataframe """
@@ -277,7 +274,7 @@ def main():
 
             def __init__(self):
                 self.filehandler = data_handler()
-            
+                
             def simple_plot(self , dataframe):
                 """ Erstellen des Simple Plots, wo ein allgemeinen Überflick erstellt wird aus der sortierte Daten """
                 fig1, (ax1, ax2, ax3) = plt.subplots(3, sharex=True)
@@ -300,7 +297,7 @@ def main():
                     countries_pop = self.filehandler.relative_columnvalue(dataframe2, i, keynamedata2, countries_pop)
                     # # Hier wird auf die Methode: data_handler.relative_columnvalue zurückgegriffen, die die relative Daten erstellt.
                     # # Deswegen initialisiert man die data_handler-Methode zu Beginn der Klasse
-                
+                        
                 # # Erstellung des exponentialles Fit: Auf Numpy ändern
                 countries_dep = np.array(countries_dep)
                 countries_pop = np.array(countries_pop)
@@ -329,7 +326,8 @@ def main():
 
         if __name__ == "__main__":
             main()
-            # # Führt das Main-Programm (Hauptprogramm) aus'''
+            # # Führt das Main-Programm (Hauptprogramm) aus
+        '''
     st.code(code_text(), language='python')
 
 class data_handler():
