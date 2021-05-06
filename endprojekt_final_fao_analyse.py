@@ -9,8 +9,7 @@ import json
 import os, sys
 
 # # Init mongodb and connection to MongoDB
-cluster = "mongodb+srv://alfabigdata:pw5478@cluster0mongotest.qtvn4.mongodb.net/FAO_analyzer?retryWrites=true&w=majority"
-client = MongoClient(cluster)
+
 db = client.FAO_analyzer
 json_dump = db.json_dump     # Collection in der Datenbank FAO-Analyzer
 
